@@ -1,0 +1,32 @@
+#include <stdio.h>
+
+main() {
+  int a[20], i, j, n, min, pos;
+
+bs:
+  printf("Enter the range : ");
+  scanf("%d", &n);
+  if (n < 1 || n > 20) {
+    printf("out of range.");
+    goto bs;
+  }
+  for (i = 0; i < n; i++)
+    scanf("%d", &a[i]);
+
+  for (i = 0; i < n; i++) {
+    min = a[i];
+    for (j = i + 1; j < n; j++) {
+      if (a[j] < a[j - 1]) {
+        min = a[j];
+        pos = j;
+      }
+    }
+    if (min != a[i]) {
+      a[i] = a[i] + a[pos];
+      a[pos] = a[i] - a[pos];
+      a[i] = a[i] - a[pos];
+    }
+  }
+  for (i = 0; i < n; i++)
+    printf("%d\n", a[i]);
+}

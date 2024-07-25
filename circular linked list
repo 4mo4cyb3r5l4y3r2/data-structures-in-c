@@ -1,0 +1,197 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct crl
+{
+int data;
+struct crl *link;
+}
+crlnode;
+
+crlnode *temp,*last;
+int n,pos;
+
+main()
+{
+  void create(),display(),insert(),deletion(),search();
+  int ch;
+  while(1)
+    {
+      printf("1.create\n");
+      printf("2.display\n");
+      printf("3.search\n");
+      printf("4.insert\n");
+      printf("5.delete\n");
+      printf("6.exit\n");
+      printf("Enter your choice: ");
+      scanf("%d",&ch);
+
+      switch (ch)
+        {
+          case 1:create();break;
+          case 2:display();break;
+          case 3:search();break;
+          case 4:insert();break;
+          case 5:deletion();break;
+          case 6:exit(0);
+          default:
+          printf("Invalid choice \nTRY AGAIN!");
+        }
+    }
+}
+void create()
+{
+  last= NULL;
+  int i;
+  repeat:
+  printf("enter the range :");
+  scanf("%d",&n);
+  if(n<1){
+    printf("%d out of range.\n",n);
+    goto repeat;
+  }
+  for(i=1;i<=n;i++)
+    {
+      temp = (crlnode *)malloc(sizeof(crlnode));
+      printf("enter data :");
+      scanf("%d",&temp->data);
+      if(last == NULL){
+        last = temp;
+        last->link = temp;
+      }
+      else{
+        temp->link = last->link;
+        last->link = temp;
+        last = temp;
+      }
+    }
+  printf("List created successfully.\n");
+}
+
+void display()
+{
+  if(last == NULL){
+    puts("List is empty.");
+    return;
+  }
+  temp = last->link;
+  printf("Updated list is :\n");
+  printf("%d\n",temp->data);
+  temp = temp->link;
+  while(temp != last->link)
+    {
+      printf("%d\n",temp->data);
+      temp = temp->link;
+    }
+}
+
+void search()
+{
+  if(last == NULL){
+    puts("list is empty.");
+    return;
+  }
+  int i,key,flag = 0;
+  printf("enter the key to search :");
+  scanf("%d",&key);
+  temp = last->link;
+  if(temp->data == key){
+    printf("%d found on pos 1.\n",temp->data);
+    flag++;
+  }
+  temp = temp->link;
+  pos = 2;
+  while(temp != last->link)
+    {
+      if(temp->data == key){
+        printf("%d found on pos %d.\n",temp->data,pos);
+        flag++;
+      }
+      temp = temp->link;
+      pos++;
+    }
+  if(flag == 0)
+    printf("%d not found.\n",key);
+}
+
+void insert()
+{
+  if(last == NULL){
+    puts("list is empty.");
+    return;
+  }
+  crlnode *ins;
+  int i;
+  repeat:
+  printf("enter the pos :");
+  scanf("%d",&pos);
+  if(pos<1 || pos>n+1){
+    printf("%d out of range.\n",pos);
+    goto repeat;
+  }
+  temp = (crlnode *)malloc(sizeof(crlnode));
+  printf("enter the key to insert :");
+  scanf("%d",&temp->data);
+  ins = last->link;
+  if(pos == 1){
+    temp->link = ins;
+    last->link = temp;
+  }
+  else if(pos == n+1){
+    temp->link = last->link;
+    last->link = temp;
+    last = temp;
+  }
+  else{
+    for(i=1;i<pos-1;i++)
+      ins = ins->link;
+    temp->link = ins->link;
+    ins->link = temp;
+  }
+  n++;
+  printf("%d inserted at pos %d.\n",temp->data,pos);
+}
+
+void deletion()
+{
+  if(last == NULL)
+  {
+    puts("list is empty.");
+    return;
+  }
+  crlnode *del;
+  int key,flag = 0;
+  printf("enter the key to delete :");
+  scanf("%d",&key);
+  temp = last->link;
+  if(temp->data == key){
+    last->link = temp->link;
+    free(temp);
+    if(n == 1)
+      last = NULL;
+    n--;
+    flag++;
+  }
+  else{
+    del = last->link;
+    do{
+      if(del->link->data == key){
+        temp = del->link;
+        del->link = temp->link;
+        if(del->link == last->link)
+          last = del;
+        n--;
+        flag++;
+        free(temp);
+        break;
+      }
+      del = del->link;
+    }
+    while(del->link != last->link);
+  }
+  if(flag == 0)
+    printf("%d not found.\n",key);
+  else
+    printf("%d deleted successfully.\n",key);
+  
+}

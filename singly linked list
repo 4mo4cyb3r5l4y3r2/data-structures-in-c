@@ -1,0 +1,191 @@
+# include <stdio.h>
+# include <stdlib.h>
+
+typedef struct node
+{
+  int data;
+  struct node *link;
+}
+node;
+
+node *strt = NULL, *nxt , *temp;
+int n;
+
+main()
+{
+  void create(),display(),insert(),deletion(),search(),revdisplay(node *);
+
+  int ch;
+  while(1)
+    {
+      printf("1.creation.\n");
+      printf("2.display.\n");
+      printf("3.search.\n");
+      printf("4.insertion.\n");
+      printf("5.deletion.\n");
+      printf("6.revdisplay.\n");
+      printf("7.exit.\n");
+      printf("enter your choice : ");
+      scanf("%d",&ch);
+
+      switch(ch)
+        {
+          case 1: create();break;
+          case 2: display();break;
+          case 3: search();break;
+          case 4: insert();break;
+          case 5: deletion();break;
+          case 6: if(strt==0){
+            printf("list is empty.\n");
+          }
+          else{
+            printf("updated list in reverse : \n");
+            revdisplay(strt);
+          }break;
+          case 7: exit(0);
+          default: 
+            puts("Invalid option.");
+        }
+    }
+}
+
+void create()
+{
+  strt = NULL;
+  int i;
+  repeat:
+  printf("enter the range : ");
+  scanf("%d",&n);
+  if(n<1){
+    printf("Invalid input.\n");
+    goto repeat;
+  }
+  for(i=1;i<=n;i++){
+    temp = (node *)malloc(sizeof(node *));
+    printf("enter the data :");
+    scanf("%d",&temp->data);
+    temp->link = NULL;
+    if(strt == NULL){
+      strt = temp;
+      nxt = temp;
+    }
+    else{
+      nxt->link = temp;
+      nxt = temp;
+    }
+  }
+  printf("list created successfully.\n");
+}
+
+void display()
+{
+  if(strt == NULL){
+    puts("List is Empty.");
+    return;
+  }
+  temp = strt;
+  puts("updated list is: ");
+  while(temp != NULL){
+    printf("%d\n",temp->data);
+    temp = temp->link;
+  }
+}
+void insert()
+{
+  int i,key,pos;
+  if(strt==NULL){
+    puts("List is Empty.");
+    return;
+  }
+  repeat:
+  printf("Enter the position to insert : ");
+  scanf("%d",&pos);
+  if(pos<1 || pos>n+1){
+    printf("%d out of range.\n",pos);
+    goto repeat;
+  }
+  printf("Enter the key to insert : ");
+  scanf("%d",&key);
+  temp = (node *)malloc(sizeof(node *));
+  temp ->data = key;
+  if(pos == 1){
+    temp ->link = strt;
+    strt = temp;
+  }
+  else{
+    nxt = strt;
+    for(i=1;i<pos-1;i++){
+      nxt = nxt->link;
+    }
+    temp->link = nxt->link;
+    nxt->link = temp;
+  }
+  n++;
+  printf("%d inserted successfully at position %d.\n",key,pos);
+}
+
+void deletion()
+{
+  int elm;
+  if(strt == NULL){
+    puts("List is Empty.");
+    return;
+  }
+  printf("Enter element to delete : ");
+  scanf("%d",&elm);
+  
+  nxt = strt;
+  if(strt->data == elm){
+    temp = strt;
+    strt = strt->link;
+    free(temp);
+    n--;
+    printf("%d deleted successfully.\n",elm);
+    return;
+  }
+  else{
+    while(nxt->link != NULL){
+      if(nxt->link->data == elm){
+        temp = nxt->link;
+        nxt->link = temp->link;
+        free(temp);
+        n--;
+        printf("%d deleted successfully.\n",elm);
+        return;
+      }
+      nxt = nxt->link;
+    }
+  }
+  printf("%d not found.\n",elm);
+}
+
+void search()
+{
+  int key,pos=1,flag=0;
+  if(strt==NULL){
+    puts("List is Empty.");
+    return;
+  }
+  printf("Enter key value to search : ");
+  scanf("%d",&key);
+  temp = strt;
+  while(temp != NULL){
+    if(temp->data == key){
+      printf("%d found at position %d.\n",key,pos);
+      flag++;
+    }
+    temp = temp->link;
+    pos++;
+  }
+  if(flag == 0)
+    printf("%d not found in the list.\n",key);
+}
+void revdisplay(node *rdsp)
+{
+  if(rdsp == NULL)
+  {
+    return;
+  }
+  revdisplay(rdsp->link);
+  printf("%d\n",rdsp->data);
+}

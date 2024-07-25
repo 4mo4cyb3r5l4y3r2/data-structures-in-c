@@ -1,0 +1,30 @@
+# include <stdio.h>
+#define MAX 20
+
+main(){
+  int a[MAX],i,j,n,min;
+
+  ins:
+  printf("Enter the size :");
+  scanf("%d",&n);
+  
+  if(n<1 || n>MAX){
+    printf("%d out of range.",n);
+    goto ins;
+  }
+  printf("Enter %d elements: \n",n);
+  for(i=0;i<n;i++)
+    scanf("%d",&a[i]);
+  for(i=0;i<n;i++){
+    for(j=i+1;j>=0;j--){
+      if(a[j]<a[j-1]){
+        a[j] = a[j] + a[j-1];
+        a[j-1] = a[j] - a[j-1];
+        a[j] = a[j] - a[j-1];
+      }
+    }
+  }
+
+  for(i=0;i<n;i++)
+    printf("%d\n",a[i]);
+}

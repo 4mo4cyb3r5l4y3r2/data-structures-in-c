@@ -1,0 +1,104 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+#define max 3
+
+int front=-1,rear=-1;
+int queue[max];
+bool IsEmpty(),IsFull();
+main(){
+  void enqueue(int),display();
+  int dequeue(),peek();
+  int ch;
+  while (1){
+    printf("1.enqueue\n2.dequeue\n3.display\n4.peek\n5.IsEmpty\n6.IsFull\n7.exit\n");
+    printf("Enter your choice: ");
+    scanf("%d",&ch);
+    switch (ch){
+      int n;
+      case 1: if(IsFull())
+        puts("queue is full");
+      else{
+        printf("Enter the element: ");
+        scanf("%d",&n);
+        enqueue(n);
+      }break;
+      case 2: if(IsEmpty())
+        puts("Queue is Underflow");
+      else
+        printf("%d deleted from the queue\n",dequeue());
+      break;
+      case 3:display();break;
+      case 4:if(IsEmpty())
+        puts("queue is Underflow.");
+      else
+        printf("%d is the peek value. \n",peek());
+      break;
+      case 5:if(IsEmpty())
+        puts("Yes,Queue is Empty");
+      else
+        puts("No,Queue is not Empty");
+      break;
+      case 6:if(IsFull())
+        puts("Yes,Queue is full");
+      else
+        puts("No,Queue is not full");
+      break;
+      case 7:exit(0);
+      default:
+      puts("Your choice is Invalid");
+    }
+  }
+}
+
+void enqueue(int n){
+  if(front==-1)
+    front=rear=0;
+  else if(rear==max-1)
+    rear=0;
+  else
+    rear++;
+  queue[rear]=n;
+  printf("%d inserted successfully\n",n);
+}
+
+int dequeue(){
+int n=queue[front];
+if(front==rear)
+  front=rear=-1;
+  else if(front==max-1)
+    front=0;
+  else
+    front++;
+  return n;
+}
+
+void display(){
+  int i;
+  if(IsEmpty())
+    puts("queue is Empty");
+  else if(front<=rear){
+    puts("Queue is : ");
+    for (i=front;i<=rear;i++)
+      printf("%d\n",queue[i]);
+  }
+  else{
+    puts("queue is:");
+    for(i=front;i<=max-1;i++)
+      printf("%d\n",queue[i]);
+    for(i=0;i<=rear;i++)
+      printf("%d\n",queue[i]);
+  }
+}
+
+int peek(){
+  return queue[front];
+}
+
+bool IsEmpty(){
+  return front ==-1;
+}
+
+bool IsFull(){
+  return((front==0&& rear==max-1)|| front==rear+1);
+}

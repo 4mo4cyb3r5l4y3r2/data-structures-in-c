@@ -1,0 +1,96 @@
+#include <stdio.h>
+#include <stdbool.h>
+#include <stdlib.h>
+#define max 3
+
+int n,i,front=-1,rear=-1;
+int queue[max];
+bool IsEmpty(),IsFull();
+
+main(){
+  void enqueue(int),display();
+  int dequeue(),peek();
+
+  int ch;
+
+  while(1){
+    printf("1.enqueue\n");
+    printf("2.dequeue\n");
+    printf("3.display\n");
+    printf("4.peek\n");
+    printf("5.IsEmpty\n");
+    printf("6.IsFull\n");
+    printf("7.Exit\n");
+    printf("Enter your choice: ");
+    scanf("%d",&ch);
+
+    switch (ch)
+      {
+        case 1: if (IsFull())
+          printf("Queue is full \n");
+        else{
+          printf("Enter the element: ");
+          scanf("%d",&n);
+          enqueue(n);
+        }break;
+        case 2: if (IsEmpty())
+          puts("Queue is Empty \n");
+        else{
+          printf("%d removed from the queue \n",dequeue());
+        }break;
+        case 3: display();break;
+        case 4: if (IsEmpty())
+          puts("Queue is Empty \n");
+        else
+          printf("%d is the peek element \n",peek());
+        break;
+        case 5:if(IsEmpty())
+          puts("Yes,The queue is Empty \n");
+        else
+          puts("No,The queue is not Empty \n");
+        break;
+        case 6:if(IsFull())
+          puts("Yes,The queue is Full \n");
+        else
+          puts("No,The queue is not Full \n");
+        break;
+        case 7:exit(0);
+        default:
+
+        printf("The Choice is Invalid \n");
+      }
+  }
+}
+void enqueue(int n){
+  if(front== -1)
+    front =rear=0;
+  else
+    rear++;
+  queue[rear]=n;
+  printf("%d is inserted in the queue\n",n);
+}
+int dequeue(){
+  return queue[front++];
+}
+
+void display(){
+  if (IsEmpty()){
+    puts("Queue is Empty \n");
+    return;
+  }
+  puts("updated queue is: ");
+  for(i=front;i<=rear;i++)
+    printf("%d\n",queue[i]);
+}
+
+int peek(){
+  return queue[front];
+}
+
+bool IsEmpty(){
+  return rear == -1  || front == rear+1;
+}
+
+bool IsFull(){
+  return rear ==max-1;
+}

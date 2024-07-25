@@ -1,0 +1,58 @@
+# include <stdio.h>
+# define max 20
+
+void mergesort(int a[max], int l1 ,int h1 ,int l2, int h2);
+main()
+{
+  int a[max],n,i;
+  void division(int a[max],int i, int n);
+  repeat:
+  printf("enter the range :");
+  scanf("%d",&n);
+  if(n<1 || n>max){
+    printf("%d o ut of range.",n);
+    goto repeat;
+  }
+  printf("enter %d elements : \n",n);
+  for(i=0;i<n;i++)
+    scanf("%d",&a[i]);
+  division(a,0,n-1);
+  printf("merge sorted list : \n");
+  for(i=0;i<n;i++)
+    printf("%d\n",a[i]);
+}
+void division (int a[20],int l , int h)
+{
+  int mid;
+  if(l<h)
+  {
+    mid = (l+h)/2;
+    division(a,l,mid);
+    division(a,mid+1,h);
+    mergesort(a,l,mid,mid+1,h);
+  }
+}
+
+void mergesort(int a[max],int l1,int h1,int l2, int h2)
+{
+  int temp [max];
+  int i,j,k=0;
+  i = l1;
+  j = l2;
+  while (i<=h1 && j<=h2)
+    {
+      if(a[i]< a[j])
+        temp[k++] = a[i++];
+      else 
+        temp[k++]= a[j++];
+    }
+  while(i<=h1)
+    temp[k++] =a[i++];
+    
+  while (j<= h2)
+    temp[k++] = a[j++];
+  
+  
+  for(i=l1,j=0;i<=h2;i++,j++)
+    a[i] = temp[j];
+}

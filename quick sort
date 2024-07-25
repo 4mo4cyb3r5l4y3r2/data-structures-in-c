@@ -1,0 +1,64 @@
+# include <stdio.h>
+# define max 20
+
+int  quick_sort(int a[max],int low,int hg);
+
+main()
+{
+  void partition(int a[max],int low,int hg);
+  int a[max],n,i;
+  sort:
+  printf("Enter the range : ");
+  scanf("%d",&n);
+  if(n<1 || n>max){
+    printf("%d out of range.\n",n);
+    goto sort;
+  }
+  printf("Enter %d elements : \n",n);
+  for(i=0;i<n;i++)
+    scanf("%d",&a[i]);
+  partition(a,0,n-1);
+  printf("Quick sorted list : \n");
+  for(i=0;i<n;i++)
+    printf("%d\n",a[i]);
+}
+
+void partition(int a[max],int low,int hg)
+{
+  int pipos;
+  if(low<hg){
+    pipos = quick_sort(a,low,hg);
+    partition(a,low,pipos-1);
+    partition(a,pipos+1,hg);
+  }
+}
+
+int quick_sort(int a[max],int low,int hg)
+{
+  int i = low+1;
+  int j = hg;
+  int pivot = a[low];
+
+  while(i<=j){
+    while(a[i]<pivot && i<hg)
+      i++;
+    while(a[j]>pivot)
+      j--;
+    if(i<j){
+      a[i] = a[i] + a[j];
+      a[j] = a[i] - a[j];
+      a[i] = a[i] - a[j];
+      i++;
+      j--;
+    }
+    else
+      break;
+  }
+  printf("\na[low] = %d",a[low]);
+  printf("\ni = %d",i);
+  a[low] = a[j];
+  printf("\nlow = %d\na[j] = %d\n",low,a[j]);
+  a[j] = pivot;
+  printf("j = %d\npivot = %d\n",j,pivot);
+  return j;
+}

@@ -1,0 +1,208 @@
+# include <stdio.h>
+# include <stdlib.h>
+
+typedef struct node
+{
+int data;
+struct node *plink;
+struct node *nlink;
+}node;
+
+node *strt = NULL, *last, *temp;
+int n,pos;
+
+int main()
+{
+  void create(),display(),search(),insert(),deletion(),revdisplay();
+  int ch;
+  while(1)
+    {
+      printf("1.creation.\n2.display.\n3.search.\n4.insertion.\n5.deletion.\n6.revdisplay.\n7.exit.\n");
+      printf("enter your choice :");
+      scanf("%d",&ch);
+      switch(ch)
+        {
+          case 1:create();break;
+          case 2:display();break;
+          case 3:search();break;
+          case 4:insert();break;
+          case 5:deletion();break;
+          case 6:revdisplay();break;
+          case 7:exit(0);
+          default:
+          puts("Invalid choice.");
+        }
+    }
+}
+
+void create()
+{
+  int i;
+  repeat:
+  printf("enter the range :");
+  scanf("%d",&n);
+  if(n<1){
+    printf("%d out of range.\n",n);
+    goto repeat;
+  }
+  for(i=1;i<=n;i++){
+    temp = (node *)malloc(sizeof(node));
+    printf("enter data :");
+    scanf("%d",&temp->data);
+    temp->plink = NULL;
+    temp->nlink = NULL;
+    if(strt == NULL){
+      strt = temp;
+      last = temp;
+    }
+    else{
+      temp->plink = last;
+      last->nlink = temp;
+      last = temp;
+    }
+  }
+}
+
+void display()
+{
+  if(strt == NULL){
+    puts("List is empty.");
+    return;
+  }
+  temp = strt;
+  while(temp != NULL)
+    {
+      printf("%d\n",temp->data);
+      temp = temp->nlink;
+    }
+}
+
+void search()
+{
+  if(strt == NULL){
+    puts("List is empty.");
+    return;
+  }
+  int key,flag = 0;
+  temp = strt;
+  printf("enter the element to search :");
+  scanf("%d",&key);
+  pos = 1;
+  while(temp != NULL)
+    {
+      if(temp->data == key){
+        printf("%d found at pos %d.\n",temp->data,pos);
+        flag++;
+      }
+      temp = temp->nlink;
+      pos++;
+    }
+  if(flag == 0)
+    printf("%d not found.\n",key);
+}
+
+void insert()
+{
+  if(strt == NULL){
+    puts("List is empty.");
+    return;
+  }
+  node *ins = strt;
+  int i;
+  repeat:
+  printf("enter the pos to insert :");
+  scanf("%d",&pos);
+  if(pos<1 || pos>n+1){
+    printf("%d out of range.\n",pos);
+    goto repeat;
+  }
+  temp = (node *)malloc(sizeof(node));
+  temp->plink = NULL;
+  temp->nlink = NULL;
+  printf("enter the key to insert :");
+  scanf("%d",&temp->data);
+  if(pos == 1){
+    temp->nlink = strt;
+    strt->plink = temp;
+    strt = temp;
+    n++;
+    printf("%d inserted at pos %d.\n",temp->data,pos);
+    return;
+  }
+  else if(pos == n+1){
+    temp->plink = last;
+    last->nlink = temp;
+    last = temp;
+    n++;
+    printf("%d inserted at pos %d.\n",temp->data,pos);
+    return;
+  }
+  for(i=1;i<pos-1;i++){
+    ins = ins->nlink;
+  }
+  temp->plink = ins;
+  temp->nlink = ins->nlink;
+  ins->nlink->plink = temp;
+  ins->nlink = temp;
+  n++;
+  printf("%d inserted at pos %d.\n",temp->data,pos);
+}
+
+void deletion(){
+  if(strt == NULL){
+    puts("List is empty.");
+    return;
+  }
+  int key,flag = 0;
+  printf("enter the elm to delete :");
+  scanf("%d",&key);
+  if(key == strt->data){
+    temp = strt;
+    strt = strt->nlink;
+    strt->plink = NULL;
+    free(temp);
+    n--;
+    flag++;
+  }
+  else if(key == last->data){
+    temp = last;
+    last = last->plink;
+    last->nlink = NULL;
+    free(temp);
+    n--;
+    flag++;
+  }
+  else{
+    node *del = strt;
+    while(del->nlink != NULL){
+      if(key == del->nlink->data){
+        temp = del->nlink;
+        del->nlink = temp->nlink;
+        temp->nlink->plink = del;
+        free(temp);
+        n--;
+        flag++;
+        break;
+      }
+      del = del->nlink;
+    }
+  }
+  if(flag == 0)
+    printf("%d not found.\n",key);
+  else
+    printf("%d deleted successfully.\n",key);
+}
+
+void revdisplay()
+{
+  if(strt == NULL){
+    puts("List is empty.");
+    return;
+  }
+  temp = last;
+  puts("Updated list in reverse :");
+  while(temp != NULL){
+    printf("%d\n",temp->data);
+    temp = temp->plink;
+  }
+}

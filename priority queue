@@ -1,0 +1,114 @@
+# include <stdio.h>
+# include <stdlib.h>
+# include <stdbool.h>
+
+
+typedef struct pri_queue{
+int data;
+int priority;
+struct pri_queue * link;
+}pri_queue;
+
+pri_queue *temp,*front=NULL;
+
+void enqueue(int,int),display();
+int dequeue(),peek();
+bool IsEmpty(),IsFull();
+
+main(){
+  int ch,n,pri;
+  while(1){
+    printf("1.enqueue.\n2.dequeue.\n3.display.\n4.peek.\n5.IsEmpty.\n6.IsFull.\n7.exit.\nenter your choice : ");
+    scanf("%d",&ch);
+    switch(ch){
+      case 1:if(IsFull())
+        puts("queue is full.");
+      else{
+        printf("enter elm to insert : ");
+        scanf("%d",&n);
+        printf("enter priority : ");
+        scanf("%d",&pri);
+        enqueue(n,pri);
+      }break;
+      case 2:if(IsEmpty())
+        puts("queue underflow.");
+      else
+        printf("%d removed from the queue.\n",dequeue());
+      break;
+      case 3:display();break;
+      case 4:if(IsEmpty())
+        puts("queue underflow.");
+      else
+        printf("peek elm is %d.\n",peek());
+      break;
+      case 5:if(IsEmpty())
+        puts("Yes,empty.");
+      else
+        puts("NO,not empty.");
+      break;
+      case 6:if(IsFull())
+        puts("Yes,full.");
+      else
+        puts("NO,not full.");
+      break;
+      case 7:exit(0);
+      default:puts("Invalid choice.");
+    }
+  }
+}
+
+void enqueue(int n,int pri){
+  temp = (pri_queue*)malloc(sizeof(pri_queue));
+  temp->data = n;
+  temp->priority = pri;
+  temp->link = NULL;
+  if(front == NULL || pri > front->priority){
+    temp->link = front;
+    front = temp;
+  }
+  else{
+    pri_queue *ins = front;
+    while(ins->link != NULL && ins->link->priority >= pri)
+      ins = ins->link;
+    temp->link = ins->link;
+    ins->link = temp;
+  }
+  printf("%d inserted successfully.\n",n);
+}
+
+int dequeue(){
+  int n = front->data;
+  temp = front;
+  front = front->link;
+  free(temp);
+  return n;
+}
+
+void display(){
+  if(front == NULL)
+    puts("queue underflow.");
+  else{
+    puts("updated queue is :");
+    temp = front;
+    while(temp){
+      printf("%d\n",temp->data);
+      temp = temp->link;
+    }
+  }
+}
+
+int peek(){
+  return front->data;
+}
+
+bool IsEmpty(){
+  return front == NULL;
+}
+
+bool IsFull(){
+  temp = (pri_queue*)malloc(sizeof(pri_queue));
+  if(temp == NULL)
+    return true;
+  free(temp);
+  return false;
+    }

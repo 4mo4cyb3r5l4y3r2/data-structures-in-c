@@ -1,0 +1,100 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+
+typedef struct queue{
+int data;
+struct queue *link;
+}queue;
+
+queue *temp,*front=NULL,*rear=NULL;
+bool IsEmpty(),IsFull();
+main(){
+  void enqueue(int),display();
+  int dequeue(),peek();
+
+  int ch,n;
+  while(1){
+    printf("\n1.enqueue\n2.dequeue\n3.display\n4.peek\n5.IsEmpty.\n6.IsFull.\n7.Exit\n");
+    printf("Enter your choice: ");
+    scanf("%d",&ch);
+    switch(ch){
+      case 1:if(IsFull())
+        puts("Queue is Full");
+      else{
+        printf("Enter the element: ");
+        scanf("%d",&n);
+        enqueue(n);
+      }break;
+      case 2:if(IsEmpty())
+        puts("Queue is Empty");
+      else
+        printf("%d removed from queue\n",dequeue());
+      break;
+      case 3:display();break;
+      case 4:if(IsEmpty())
+        puts("Queue is Empty");
+      else 
+        printf("%d is the peek element\n",peek());
+      break;
+      case 5:if(IsEmpty())
+        puts("Yes,Queue is Empty");
+      else
+        puts("No,Queue is not Empty");
+      break;
+      case 6:if(IsFull())
+        puts("Yes,Queue is Full");
+      else
+        puts("No,Queue is not Full");
+      break;
+      case 7:exit(0);
+      default:printf("Invalid choice");
+    }
+  }
+}
+
+void enqueue(int n){
+  temp=(queue*)malloc(sizeof(queue));
+  temp->data =n;
+  temp->link=NULL;
+  if(front==NULL)
+    front=rear=temp;
+  else{
+    rear->link=temp;
+    rear=temp;
+  }
+  printf("%d inserted in queue\n",n);
+}
+int dequeue(){
+  temp =front;
+  front=front->link;
+  int n=temp->data;
+  free(temp);
+  return n;
+}
+
+void display(){
+  if(IsEmpty())
+    puts("Queue is Empty");
+  else{
+    puts("Queue is : ");
+    temp=front;
+    while (temp !=NULL){
+      printf("%d\n",temp->data);
+      temp=temp->link;
+    }
+  }
+}
+
+int peek(){
+  return front->data;
+}
+
+bool IsEmpty(){
+  return front==NULL;
+}
+
+bool IsFull(){
+  temp = (queue*)malloc(sizeof(queue));
+  return temp ==NULL;
+}
